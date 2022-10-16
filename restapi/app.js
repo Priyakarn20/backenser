@@ -3,6 +3,7 @@ const app = express();
 const studentRouter = require('./api/routes/student');
 const facultyRouter = require('./api/routes/faculty'); 
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 mongoose.connect('mongodb+srv://user:user@cluster0.bpn3qta.mongodb.net/?retryWrites=true&w=majority')
 
@@ -13,6 +14,11 @@ mongoose.connection.on('error', err=>{
 mongoose.connection.on('connected', connected=>{
     console.log('connected with database successfully')
 });
+
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 
 app.use('/student', studentRouter);
 app.use('/faculty', facultyRouter);
