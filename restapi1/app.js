@@ -4,7 +4,7 @@ const productRouter = require('./api/routes/product');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-mongoose.connect('mongodb+srv://user:user@cluster0.bpn3qta.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://user:<password>@cluster0.bpn3qta.mongodb.net/?retryWrites=true&w=majority')
 
 mongoose.connection.on('error', err=>{
     console.log('connection failed')
