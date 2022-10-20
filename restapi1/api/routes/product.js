@@ -2,8 +2,16 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../../model/model.product');
 const mongoose = require('mongoose');
+const checkAuth = require('../middleware/check-auth');
+const cloudinary = require('cloudinary').v2;
 
-router.get('/', (req, res, next) => {
+cloudinary.config({
+    cloud_name: '',
+    api_key: '',
+    api_secret: ''
+});
+
+router.get('/', checkAuth, (req, res, next) => {
 
     Product.find()
         .then(result => {
@@ -14,7 +22,7 @@ router.get('/', (req, res, next) => {
         .catch(err => {
             console.log(err);
             res.status(500).json({
-                errorr: err
+                error: err
             })
         });
 })
@@ -36,26 +44,33 @@ router.get('/:id', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
-    const product = new Product({
-        _id: new mongoose.Types.ObjectId,
-        code: req.body.code,
-        title: req.body.title,
-        description: req.body.description,
-        mrp: req.body.mrp
-    })
-    product.save()
-        .then(result => {
-            console.log(result);
-            res.status(200).json({
-                newProduct: result
-            })
+    console.log(req.body);
+    const file = req.files.image;
+    cloudinary.uploader.upload(file.tempFilePath,(err, result)=>{
+        console.log(result);
+        const product = new Product({
+            _id: new mongoose.Types.ObjectId,
+            code: req.body.code,
+            title: req.body.title,
+            description: req.body.description,
+            mrp: req.body.mrp,
+            imagePath: result.url
         })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
+        product.save()
+            .then(result => {
+                console.log(result);
+                res.status(200).json({
+                    newProduct: result
+                })
             })
-        })
+            .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    error: err
+                })
+            })
+    });
+   
 })
 
 //delete request

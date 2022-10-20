@@ -2,8 +2,10 @@ const express = require('express');
 const app = express();
 const productRouter = require('./api/routes/product');
 const userRouter = require('./api/routes/user');
+const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 mongoose.connect('mongodb+srv://user:<password>@cluster0.bpn3qta.mongodb.net/?retryWrites=true&w=majority')
 
@@ -14,6 +16,12 @@ mongoose.connection.on('error', err=>{
 mongoose.connection.on('connected', connected=>{
     console.log('connection connected with db')
 });
+
+app.use(fileUpload({
+    useTempFiles: true
+}))
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
