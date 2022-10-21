@@ -1,5 +1,5 @@
 const http = require('http');
 const app = require('./app');
 const server = http.createServer(app);
-
-server.listen(4000, console.log('app is running on port 4000'));
+const port = process.env.Port || 4000;
+server.listen(port, console.log('app is running on port'));

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const productRouter = require('./api/routes/product');
@@ -7,7 +8,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-mongoose.connect('mongodb+srv://user:<password>@cluster0.bpn3qta.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect(process.env.DB);
 
 mongoose.connection.on('error', err=>{
     console.log('connection failed')
@@ -22,6 +23,8 @@ app.use(fileUpload({
 }))
 
 app.use(cors());
+
+
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());

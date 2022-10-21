@@ -6,10 +6,10 @@ const checkAuth = require('../middleware/check-auth');
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
-    cloud_name: '',
-    api_key: '',
-    api_secret: ''
-});
+    cloud_name: process.env.cloud_name,
+    api_key: process.env.api_key,
+    api_secret: process.env.api_secret}
+)
 
 router.get('/', checkAuth, (req, res, next) => {
 
